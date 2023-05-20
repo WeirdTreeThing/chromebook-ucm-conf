@@ -1,0 +1,63 @@
+SectionVerb {
+	Value {
+		FullySpecifiedUCM "1"
+	}
+	EnableSequence [
+	]
+	DisableSequence [
+	]
+}
+
+If.4ch {
+	Condition {
+		Type String
+		Haystack "${sys:devices/virtual/dmi/id/bios_version}"
+		Needle "Google"
+	}
+	True {
+		SectionDevice."Internal Mic" {
+			Comment "Internal Microphone"
+
+			Value {
+				CapturePCM "hw:avsdmic,2"
+				CaptureChannels 4
+				CaptureChannelMap "0 0 -1 -1 -1 -1 -1 -1 -1 -1 -1"
+				IntrinsicSensitivity "-2600"
+			}
+			If.dspvol {
+				Condition {
+					Type ControlExists
+					Control "name='DMIC FE DMIC Volume'"
+				}
+				True {
+					EnableSequence [
+						cset "name='DMIC FE DMIC Volume' 2147483647"
+					]
+				}
+			}
+		}
+	}
+	False {
+		SectionDevice."Internal Mic" {
+			Comment "Internal Microphone"
+
+			Value {
+				CapturePCM "hw:avsdmic,2"
+				CaptureChannels 2
+				CaptureChannelMap "0 0 -1 -1 -1 -1 -1 -1 -1 -1 -1"
+				IntrinsicSensitivity "-2600"
+			}
+			If.dspvol {
+				Condition {
+					Type ControlExists
+					Control "name='DMIC FE DMIC Volume'"
+				}
+				True {
+					EnableSequence [
+						cset "name='DMIC FE DMIC Volume' 2147483647"
+					]
+				}
+			}
+		}
+	}
+}
