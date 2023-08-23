@@ -4,8 +4,7 @@ import os
 import sys
 import json
 
-variant = ""
-ucm_suffixes = []
+variants = []
 sku_ids = {}
 
 with open("project-config.json", "r") as project:
@@ -13,10 +12,18 @@ with open("project-config.json", "r") as project:
 
 configs = p_json['chromeos']['configs']
 
+print("Variants:")
+for config in configs:
+    variant = config['name']
+    if not variant in variants:
+        variants.append(variant)
+        print(variant)
+
+variant = input("Choose a variant: ")
+
 for config in configs:
     if config['audio']['main']['cras-config-dir'] == variant:
-        if not config['audio']['main']['ucm-suffix'] in ucm_suffixes:
-            ucm_suffixes.append(config['audio']['main']['ucm-suffix'])
+        if not config['audio']['main']['ucm-suffix'] in sku_ids:
             sku_ids[config['audio']['main']['ucm-suffix']] = []
         sku_ids[config['audio']['main']['ucm-suffix']].append(config['identity']['sku-id'])
 
