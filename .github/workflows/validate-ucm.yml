@@ -3,6 +3,7 @@ name: Validate UCM
 on:
   push:
     branches: ["main"]
+  pull_request:
 
 jobs:
   validate:
